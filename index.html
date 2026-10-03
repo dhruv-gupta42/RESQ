@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESQ - Emergency Response Dashboard</title>
+    <meta name="description" content="RESQ - A real-time emergency response simulation dashboard">
+
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Our Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Dark mode is ON by default -->
+<body class="dark-mode">
+
+    <!-- ======== NOTIFICATION CONTAINER (toasts appear here) ======== -->
+    <div id="notification-container"></div>
+
+    <!-- ======== MODAL (hidden by default, shown by JS) ======== -->
+    <div id="modal-overlay" onclick="closeModal()">
+        <div id="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modal-body"></div>
+            <div id="modal-actions"></div>
+        </div>
+    </div>
+
+    <!-- ======== NAVBAR ======== -->
+    <nav id="navbar">
+        <div class="nav-left">
+            <span class="logo">RES<span class="logo-accent">Q</span></span>
+            <span class="nav-subtitle">Emergency Control</span>
+        </div>
+        <div class="nav-right">
+            <div class="system-info">
+                <span class="operational">● OPERATIONAL</span>
+                <span id="system-clock"></span>
+            </div>
+            <button id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+        </div>
+    </nav>
+
+    <!-- ======== MAIN CONTENT ======== -->
+    <main>
+
+        <!-- ---- Dashboard Stats ---- -->
+        <section id="stats-section">
+            <div class="stat-card stat-card-active">
+                <span class="stat-number" id="stat-active">0</span>
+                <span class="stat-label">Active</span>
+            </div>
+            <div class="stat-card stat-card-critical">
+                <span class="stat-number" id="stat-critical">0</span>
+                <span class="stat-label">Critical</span>
+            </div>
+            <div class="stat-card stat-card-responding">
+                <span class="stat-number" id="stat-responding">0</span>
+                <span class="stat-label">Responding</span>
+            </div>
+            <div class="stat-card stat-card-resolved">
+                <span class="stat-number" id="stat-resolved">0</span>
+                <span class="stat-label">Resolved</span>
+            </div>
+        </section>
+
+        <!-- ---- Create Emergency Form ---- -->
+        <section id="create-section">
+            <h2 class="section-title">Create Emergency</h2>
+            <form id="emergency-form" onsubmit="createEmergency(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="emergency-type">Type</label>
+                        <select id="emergency-type" required>
+                            <option value="fire">🔥 Fire</option>
+                            <option value="medical">🚑 Medical</option>
+                            <option value="accident">🚗 Accident</option>
+                            <option value="flood">🌊 Flood</option>
+                            <option value="gas">💨 Gas Leak</option>
+                            <option value="other">⚠️ Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergency-location">Location</label>
+                        <input type="text" id="emergency-location" placeholder="e.g. Andheri" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergency-severity">Severity</label>
+                        <select id="emergency-severity" required>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="emergency-desc">Description</label>
+                    <textarea id="emergency-desc" placeholder="Describe the emergency..." rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn-create">🚨 Create Emergency</button>
+            </form>
+        </section>
+
+        <!-- ---- Search, Filter & Sort ---- -->
+        <section id="filter-section">
+            <input type="text" id="search-input" placeholder="Search by location, type, or description..." oninput="applyFilters()">
+            <div id="filter-buttons">
+                <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+                <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+                <button class="filter-btn" onclick="setFilter('responding', this)">Responding</button>
+                <button class="filter-btn" onclick="setFilter('critical', this)">Critical</button>
+            </div>
+            <select id="sort-select" onchange="applySort()">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="severity-high">Highest Severity</option>
+                <option value="severity-low">Lowest Severity</option>
+            </select>
+        </section>
+
+        <!-- ---- Active Incidents ---- -->
+        <section id="emergencies-section">
+            <h2 class="section-title">Active Incidents</h2>
+            <div id="emergencies-grid"></div>
+            <p id="no-results">No active incidents match your filters.</p>
+        </section>
+
+        <!-- ---- Recent Activity ---- -->
+        <section id="activity-section">
+            <h2 class="section-title">Recent Activity</h2>
+            <div id="activity-list"></div>
+        </section>
+
+        <!-- ---- Resolution History ---- -->
+        <section id="history-section">
+            <h2 class="section-title">Resolution History</h2>
+            <div id="history-grid"></div>
+            <p id="no-history">No resolved emergencies yet.</p>
+        </section>
+
+    </main>
+
+    <!-- ======== FOOTER ======== -->
+    <footer>
+        <p>RESQ &mdash; Emergency Response Simulator</p>
+    </footer>
+
+    <!-- Our Script -->
+    <script src="script.js"></script>
+</body>
+</html>

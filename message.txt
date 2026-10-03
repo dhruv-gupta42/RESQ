@@ -1,0 +1,237 @@
+The problem we're solving is:
+
+When multiple emergencies occur, it can be difficult for a person monitoring them to keep track of all incidents, their severity, locations, and current response status in one place.
+
+RESQ gives the user a single emergency-response dashboard where they can simulate and manage incidents.
+
+Example situation
+
+Imagine you're operating a fictional emergency control room.
+
+You receive:
+
+🔥 Fire
+Location: Andheri
+Severity: Critical
+
+🚑 Medical Emergency
+Location: Bandra
+Severity: High
+
+🚗 Accident
+Location: Dadar
+Severity: Medium
+
+Instead of having these as random notifications, RESQ puts everything into one organized interface.
+
+🖥️ What the website actually does
+1. Dashboard
+
+When you open RESQ:
+
+┌──────────────────────────────────────────────────┐
+│ RESQ                          Emergency Control  │
+├──────────────────────────────────────────────────┤
+│                                                  │
+│  Active        Critical       Resolved           │
+│    8              2              15              │
+│                                                  │
+├──────────────────────────────────────────────────┤
+│              ACTIVE EMERGENCIES                  │
+│                                                  │
+│ 🔥 Fire         Andheri      CRITICAL   ACTIVE   │
+│ 🚑 Medical      Bandra       HIGH       ACTIVE   │
+│ 🚗 Accident     Dadar        MEDIUM     ACTIVE   │
+│                                                  │
+└──────────────────────────────────────────────────┘
+2. Create an Emergency
+
+There is a form:
+
+Create Emergency
+
+Emergency Type
+[ Fire ▼ ]
+
+Location
+[ Andheri ]
+
+Severity
+[ Critical ▼ ]
+
+Description
+[________________________]
+
+        CREATE EMERGENCY
+
+When you click the button, JavaScript creates a new emergency card.
+
+3. Emergency Cards
+
+Each emergency can look like:
+
+┌──────────────────────────────┐
+│ 🔥 FIRE                      │
+│                              │
+│ 📍 Andheri                   │
+│ ⚠ Critical                  │
+│ 🕐 10:42 PM                  │
+│                              │
+│ Status: ACTIVE               │
+│                              │
+│ [ RESPOND ]   [ RESOLVE ]    │
+└──────────────────────────────┘
+
+Everything is dynamically generated with JavaScript.
+
+🚑 4. Response Status
+
+This is where the site becomes more interactive.
+
+An emergency can go through:
+
+ACTIVE
+   ↓
+RESPONDING
+   ↓
+RESOLVED
+
+For example:
+
+🔥 Fire — Andheri
+
+Status: ACTIVE
+
+        ↓ Click Respond
+
+Status: RESPONDING
+
+        ↓ Click Resolve
+
+Status: RESOLVED
+
+The dashboard counters update automatically.
+
+📊 5. Dashboard Statistics
+
+JavaScript can calculate:
+
+Active Emergencies     7
+Critical Emergencies  2
+Responding            3
+Resolved              18
+
+So when you create or resolve an emergency, these numbers change automatically.
+
+🗺️ 6. Optional Map Section
+
+You don't even need a real map initially.
+
+You could make a fake city map using HTML/CSS:
+
+             ANDHERI 🔥
+                 ●
+                 │
+      ●──────────●────────●
+    BANDRA      DADAR    SION
+      🚑          🚗
+
+Or later integrate Google Maps/Leaflet if you want.
+
+But for the first version, I'd keep it completely HTML/CSS/JS.
+
+🔔 7. Emergency Notifications
+
+When you create an emergency:
+
+┌─────────────────────────────────────┐
+│ 🚨 NEW EMERGENCY                    │
+│                                     │
+│ Critical fire reported in Andheri  │
+└─────────────────────────────────────┘
+
+It appears as a small notification and disappears after a few seconds.
+
+This can be done entirely with JavaScript.
+
+🔎 8. Search & Filter
+
+You could have:
+
+Search emergencies...
+
+and filters:
+
+[ All ] [ Critical ] [ Active ] [ Resolved ]
+
+For example, clicking Critical only shows:
+
+🔥 Fire — Andheri
+🚑 Medical — Bandra
+🌙 9. Dark/Light Mode
+
+Since you like the clean UI style, I'd make RESQ look like a modern control-room dashboard.
+
+Something like:
+
+       RESQ
+Emergency Response Simulator
+
+┌─────────────────────────────────────┐
+│  08        02        15             │
+│ ACTIVE   CRITICAL   RESOLVED        │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ 🔥 FIRE                             │
+│ Andheri                             │
+│ Critical                            │
+│                                     │
+│        [ Respond ] [ Resolve ]      │
+└─────────────────────────────────────┘
+
+And a ☀ / 🌙 toggle.
+
+🧠 So the entire project is basically
+             RESQ
+              │
+              ▼
+       Create Emergency
+              │
+              ▼
+       Store Emergency
+              │
+              ▼
+      Display Emergency
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+   Respond        Resolve
+       │             │
+       ▼             ▼
+   Update Status   History
+       │
+       ▼
+ Update Dashboard
+Technologies
+HTML
+ ↓
+Structure
+
+CSS
+ ↓
+UI / animations / responsive design
+
+JavaScript
+ ↓
+All functionality
+
+No database.
+No backend.
+No DSA.
+No hardware.
+No APIs required.
+
+Just a polished interactive emergency simulation dashboard.
+
+And honestly, for the first version, I'd build one single-page application with 4 sections: Dashboard → Create Emergency → Active Incidents → History. Then we can make the UI look really good before adding anything complicated.
